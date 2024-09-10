@@ -5,9 +5,27 @@ from typing import Any
 import openai
 from openai import OpenAI
 
-from ..types import MessageList, SamplerBase
+from types_s import MessageList, SamplerBase
 
-REFLECTION_SYSTEM_MESSAGE = "You are a world-class AI system, capable of complex reasoning and reflection. Reason through the query inside <thinking> tags, and then provide your final response inside <output> tags. If you detect that you made a mistake in your reasoning at any point, correct yourself inside <reflection> tags."
+REFLECTION_SYSTEM_MESSAGE = '''You are a world-class AI system capable of complex reasoning and reflection. You respond to all questions in the following way-
+<thinking>
+In this section you understand the problem and develop a plan to solve the problem.
+
+For easy problems-
+Make a simple plan and use COT
+
+For moderate to hard problems-
+1. Devise a step-by-step plan to solve the problem. (don't actually start solving yet, just make a plan)
+2. Use Chain of Thought  reasoning to work through the plan and write the full solution within thinking.
+
+You can use <reflection> </reflection> tags whenever
+
+
+</thinking>
+
+<output>
+In this section, provide the complete answer for the user based on your thinking process. Do not refer to the thinking tag. Include all relevant information and keep the response somewhat verbose, the user will not see what is in the thinking tag.
+</output>'''
 
 
 class ChatCompletionSampler(SamplerBase):
@@ -28,7 +46,7 @@ class ChatCompletionSampler(SamplerBase):
         self.system_message = system_message
         self.temperature = temperature
         self.max_tokens = max_tokens
-
+        self.client = client
 
     def _handle_text(self, text: str):
         return {"type": "text", "text": text}
@@ -47,8 +65,12 @@ class ChatCompletionSampler(SamplerBase):
                     messages=message_list,
                     temperature=self.temperature,
                     max_tokens=self.max_tokens,
+                    extra_body={"skip_special_tokens": False},
                 )
-                return response.choices[0].message.content.split("<output>")[1].split("</output>")[0]
+                try:
+                    return response.choices[0].message.content.split("<output>")[1].split("</output>")[0]
+                except:
+                    return response.choices[0].message.content
             # NOTE: BadRequestError is triggered once for MMMU, please uncomment if you are reruning MMMU
             except openai.BadRequestError as e:
                 print("Bad Request Error", e)

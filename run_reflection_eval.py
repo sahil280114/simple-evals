@@ -4,28 +4,43 @@ import time
 import pandas as pd
 
 from openai import OpenAI
+try:
+    from . import common
+    from .gpqa_eval import GPQAEval
+    from .humaneval_eval import HumanEval
+    from .math_eval import MathEval
+    from .mmlu_eval import MMLUEval
+    from .sampler.reflection_sampler import (
+        REFLECTION_SYSTEM_MESSAGE,
+        ChatCompletionSampler,
+    )
 
-from . import common
-from .gpqa_eval import GPQAEval
-from .humaneval_eval import HumanEval
-from .math_eval import MathEval
-from .mmlu_eval import MMLUEval
-from .sampler.reflection_sampler import (
-    REFLECTION_SYSTEM_MESSAGE,,
-    ChatCompletionSampler,
-)
+    from .sampler.chat_completion_sampler import ChatCompletionSampler as CheckerSampler
+except:
+    import common
+    from gpqa_eval import GPQAEval
+    from humaneval_eval import HumanEval
+    from math_eval import MathEval
+    from mmlu_eval import MMLUEval
+    from sampler.reflection_sampler import (
+        REFLECTION_SYSTEM_MESSAGE,
+        ChatCompletionSampler,
+    )
 
-from .sampler.chat_completion_sampler import ChatCompletionSampler as CheckerSampler
+    from sampler.chat_completion_sampler import ChatCompletionSampler as CheckerSampler
 
 
 def main():
     debug = True
   # init your client
-    client = OpenAI()
+    client = OpenAI(
+        base_url="http://0.0.0.0:5050/v1",
+        api_key="test",
+    )
     samplers = {
         # chatgpt models:
         "reflection_70b": ChatCompletionSampler(
-            model="reflection_70b",
+            model="shareweights/v5_70",
             system_message=REFLECTION_SYSTEM_MESSAGE,
             client=client
         ),
@@ -44,16 +59,15 @@ def main():
                     equality_checker=equality_checker,
                 )
             case "gpqa":
-                return GPQAEval(n_repeats= 10)
+                return GPQAEval(n_repeats= 1)
             case "humaneval":
                 return HumanEval()
             case _:
                 raise Exception(f"Unrecoginized eval type: {eval_name}")
 
     evals = {
-        eval_name: get_evals(eval_name) for eval_name in ["mmlu", "math", "gpqa","humaneval"]
+        eval_name: get_evals(eval_name) for eval_name in ["math"]
     }
-    print(evals)
     debug_suffix = "_DEBUG" if debug else ""
     mergekey2resultpath = {}
     for sampler_name, sampler in samplers.items():
