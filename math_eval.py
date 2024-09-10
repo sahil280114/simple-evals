@@ -10,23 +10,17 @@ import re
 import blobfile as bf
 import pandas
 
-from . import common
-from .common import ANSWER_PATTERN, HTML_JINJA, check_equality
-from .types import Eval, EvalResult, SamplerBase, SingleEvalResult
+import common
+from common import ANSWER_PATTERN, HTML_JINJA, check_equality
+from types_s import Eval, EvalResult, SamplerBase, SingleEvalResult
 
-QUERY_TEMPLATE = """
-Solve the following math problem step by step. The last line of your response should be of the form Answer: $ANSWER (without quotes) where $ANSWER is the answer to the problem.
-
-{Question}
-
-Remember to put your answer on its own line after "Answer:", and you do not need to use a \\boxed command.
-""".strip()
+QUERY_TEMPLATE = """{Question}. The last line of your response should be of the form Answer: $ANSWER (without quotes) where $ANSWER is the answer to the problem.""".strip()
 
 
 class MathEval(Eval):
     def __init__(self, equality_checker: SamplerBase, num_examples: int | None = None):
         df = pandas.read_csv(
-            bf.BlobFile("https://openaipublic.blob.core.windows.net/simple-evals/math_test.csv")
+            "https://openaipublic.blob.core.windows.net/simple-evals/math_test.csv"
         )
         examples = [row.to_dict() for _, row in df.iterrows()]
         if num_examples:
