@@ -20,9 +20,9 @@ from human_eval.data import HUMAN_EVAL, read_problems
 from human_eval.evaluation import estimate_pass_at_k
 from human_eval.execution import check_correctness  # , unsafe_execute
 
-from . import common
-from .common import HTML_JINJA
-from .types import Eval, EvalResult, SamplerBase, SingleEvalResult
+import common
+from common import HTML_JINJA
+from types_s import Eval, EvalResult, SamplerBase, SingleEvalResult
 
 
 def evaluate_functional_correctness(
@@ -49,15 +49,18 @@ def evaluate_functional_correctness(
             result = future.result()
             results.append(result)
     passed = [int(r["passed"]) for r in results]
+    with open("results.jsonl", "a") as f:
+        for r in results:
+            f.write(json.dumps(r) + "\n")
     return passed
 
 
 class HumanEval(Eval):
     def __init__(
         self,
-        num_examples: int = 250,  # restrict to a subset of the data for debugging
-        num_samples_per_task: int = 5,
-        ks_passes: list[int] = [1, 2, 5],
+        num_examples: int = 164,  # restrict to a subset of the data for debugging
+        num_samples_per_task: int = 1,
+        ks_passes: list[int] = [1],
         timeout: int = 120,
     ):
         self.seed = 0
@@ -72,15 +75,12 @@ class HumanEval(Eval):
         self._timeout = timeout
 
     def __call__(self, sampler: SamplerBase) -> EvalResult:
-        instruction = "Read the following function signature and docstring, and fully implement the function described. Your response should only contain the code for this function.\n"
+        instruction = "Complete the following code snippet, and always put python code in ```python markdown block. "
 
         def find_code(completion):
             pattern = re.compile(r"```python\n(.*?)```", re.DOTALL)
             matches = pattern.findall(completion)
             extracted_answer = matches[0] if len(matches) >= 1 else completion
-            extracted_answer = extracted_answer[
-                extracted_answer.find(":\n    ") + 2 :
-            ]  # remove signature
             return extracted_answer
 
         def fn(sample: dict[str, str]):
