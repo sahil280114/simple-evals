@@ -14,7 +14,7 @@ import common
 from common import ANSWER_PATTERN, HTML_JINJA, check_equality
 from types_s import Eval, EvalResult, SamplerBase, SingleEvalResult
 
-QUERY_TEMPLATE = """{Question}. The last line of your response should be of the form Answer: $ANSWER (without quotes) where $ANSWER is the answer to the problem.""".strip()
+QUERY_TEMPLATE = """{Question}. The last line of your response should be of the form Answer: $ANSWER (without quotes) where $ANSWER is the answer to the problem. """
 
 
 class MathEval(Eval):
@@ -37,6 +37,7 @@ class MathEval(Eval):
             match = re.search(ANSWER_PATTERN, response_text)
             extracted_answer = match.group(1) if match else None
             score = float(check_equality(self.equality_checker, row["Answer"], extracted_answer))
+            #print(f"Extracted answer: {extracted_answer}, Correct answer: {row['Answer']}, Score: {score}")
             html = common.jinja_env.from_string(HTML_JINJA).render(
                 prompt_messages=prompt_messages,
                 next_message=dict(content=response_text, role="assistant"),

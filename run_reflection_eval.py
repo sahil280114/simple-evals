@@ -34,13 +34,13 @@ def main():
     debug = True
   # init your client
     client = OpenAI(
-        base_url="http://0.0.0.0:5050/v1",
-        api_key="test",
+    base_url="http://0.0.0.0:5050/v1",
+    api_key="test",
     )
     samplers = {
         # chatgpt models:
         "reflection_70b": ChatCompletionSampler(
-            model="shareweights/v5_70",
+            model="shareweights/v5_70_bf16",
             system_message=REFLECTION_SYSTEM_MESSAGE,
             client=client
         ),
@@ -59,14 +59,14 @@ def main():
                     equality_checker=equality_checker,
                 )
             case "gpqa":
-                return GPQAEval(n_repeats= 1)
+                return GPQAEval()
             case "humaneval":
                 return HumanEval()
             case _:
                 raise Exception(f"Unrecoginized eval type: {eval_name}")
 
     evals = {
-        eval_name: get_evals(eval_name) for eval_name in ["math"]
+        eval_name: get_evals(eval_name) for eval_name in ["humaneval","gpqa","math","mmlu"]
     }
     debug_suffix = "_DEBUG" if debug else ""
     mergekey2resultpath = {}

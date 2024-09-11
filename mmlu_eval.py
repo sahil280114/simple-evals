@@ -9,10 +9,9 @@ import re
 
 import blobfile as bf
 import pandas
-
-from . import common
-from .common import ANSWER_PATTERN_MULTICHOICE, HTML_JINJA, format_multichoice_question
-from .types import Eval, EvalResult, SamplerBase, SingleEvalResult
+import common
+from common import ANSWER_PATTERN_MULTICHOICE, HTML_JINJA, format_multichoice_question
+from types_s import Eval, EvalResult, SamplerBase, SingleEvalResult
 
 subject2category = {
     "abstract_algebra": "stem",
@@ -78,7 +77,7 @@ subject2category = {
 class MMLUEval(Eval):
     def __init__(self, num_examples: int | None = None):
         df = pandas.read_csv(
-            bf.BlobFile("https://openaipublic.blob.core.windows.net/simple-evals/mmlu.csv")
+            "https://openaipublic.blob.core.windows.net/simple-evals/mmlu.csv"
         )
         examples = [row.to_dict() for _, row in df.iterrows()]
         if num_examples:
@@ -93,6 +92,8 @@ class MMLUEval(Eval):
             response_text = sampler(prompt_messages)
             match = re.search(ANSWER_PATTERN_MULTICHOICE, response_text)
             extracted_answer = match.group(1) if match else None
+            print(f"Extracted answer: {extracted_answer}")
+            print(f"Correct answer: {row['Answer']}")
             score = 1.0 if extracted_answer == row["Answer"] else 0.0
             html = common.jinja_env.from_string(HTML_JINJA).render(
                 prompt_messages=prompt_messages,
