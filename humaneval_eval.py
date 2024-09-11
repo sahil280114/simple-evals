@@ -20,10 +20,14 @@ from human_eval.data import HUMAN_EVAL, read_problems
 from human_eval.evaluation import estimate_pass_at_k
 from human_eval.execution import check_correctness  # , unsafe_execute
 
-import common
-from common import HTML_JINJA
-from types_s import Eval, EvalResult, SamplerBase, SingleEvalResult
-
+try:
+    import common
+    from common import HTML_JINJA
+    from types_s import Eval, EvalResult, SamplerBase, SingleEvalResult
+except:
+    from . import common
+    from .common import HTML_JINJA
+    from .types_s import Eval, EvalResult, SamplerBase, SingleEvalResult
 
 def evaluate_functional_correctness(
     sample: dict[str, str],

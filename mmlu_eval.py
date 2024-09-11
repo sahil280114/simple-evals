@@ -3,15 +3,24 @@ Measuring Massive Multitask Language Understanding
 Dan Hendrycks, Collin Burns, Steven Basart, Andy Zou, Mantas Mazeika, Dawn Song, Jacob Steinhardt
 https://arxiv.org/abs/2009.03300
 """
+try:
+    import random
+    import re
 
-import random
-import re
+    import blobfile as bf
+    import pandas
+    import common
+    from common import ANSWER_PATTERN_MULTICHOICE, HTML_JINJA, format_multichoice_question
+    from types_s import Eval, EvalResult, SamplerBase, SingleEvalResult
+except:
+    import random
+    import re
 
-import blobfile as bf
-import pandas
-import common
-from common import ANSWER_PATTERN_MULTICHOICE, HTML_JINJA, format_multichoice_question
-from types_s import Eval, EvalResult, SamplerBase, SingleEvalResult
+    import blobfile as bf
+    import pandas
+    from . import common
+    from .common import ANSWER_PATTERN_MULTICHOICE, HTML_JINJA, format_multichoice_question
+    from .types_s import Eval, EvalResult, SamplerBase, SingleEvalResult
 
 subject2category = {
     "abstract_algebra": "stem",

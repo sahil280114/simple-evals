@@ -4,8 +4,10 @@ from typing import Any
 
 import openai
 from openai import OpenAI
-
-from types_s import MessageList, SamplerBase
+try:
+    from types_s import MessageList, SamplerBase
+except:
+    from .types_s import MessageList, SamplerBase
 
 OPENAI_SYSTEM_MESSAGE_API = "You are a helpful assistant."
 OPENAI_SYSTEM_MESSAGE_CHATGPT = (

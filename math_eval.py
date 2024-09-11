@@ -10,9 +10,14 @@ import re
 import blobfile as bf
 import pandas
 
-import common
-from common import ANSWER_PATTERN, HTML_JINJA, check_equality
-from types_s import Eval, EvalResult, SamplerBase, SingleEvalResult
+try:
+    import common
+    from common import ANSWER_PATTERN, HTML_JINJA, check_equality
+    from types_s import Eval, EvalResult, SamplerBase, SingleEvalResult
+except:
+    from . import common
+    from .common import ANSWER_PATTERN, HTML_JINJA, check_equality
+    from .types_s import Eval, EvalResult, SamplerBase, SingleEvalResult
 
 QUERY_TEMPLATE = """{Question}. The last line of your response should be of the form Answer: $ANSWER (without quotes) where $ANSWER is the answer to the problem. """
 

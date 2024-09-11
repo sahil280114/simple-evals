@@ -6,8 +6,10 @@ from typing import Any
 import jinja2
 import numpy as np
 from tqdm import tqdm
-
-from types_s import EvalResult, Message, SamplerBase, SingleEvalResult
+try:
+    from types_s import EvalResult, Message, SamplerBase, SingleEvalResult
+except:
+    from .types_s import EvalResult, Message, SamplerBase, SingleEvalResult
 
 QUERY_TEMPLATE_MULTICHOICE = """
 {Question}.

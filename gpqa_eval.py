@@ -9,10 +9,14 @@ import re
 
 import blobfile as bf
 import pandas
-
-import common
-from common import ANSWER_PATTERN_MULTICHOICE, HTML_JINJA, format_multichoice_question
-from types_s import Eval, EvalResult, MessageList, SamplerBase, SingleEvalResult
+try:
+    import common
+    from common import ANSWER_PATTERN_MULTICHOICE, HTML_JINJA, format_multichoice_question
+    from types_s import Eval, EvalResult, MessageList, SamplerBase, SingleEvalResult
+except:
+    from . import common
+    from .common import ANSWER_PATTERN_MULTICHOICE, HTML_JINJA, format_multichoice_question
+    from .types_s import Eval, EvalResult, MessageList, SamplerBase, SingleEvalResult
 
 
 class GPQAEval(Eval):
@@ -23,7 +27,8 @@ class GPQAEval(Eval):
         num_examples: int | None = None,  # restrict to a subset of the data for debugging
     ):
         df = pandas.read_csv(
-                "gpqa.csv"
+                "gpqa.csv" #read local file which is downloaded from https://huggingface.co/datasets/Idavidrein/gpqa/blob/main/gpqa_main.csv
+
         )
         examples = [row.to_dict() for _, row in df.iterrows()]
         rng = random.Random(0)
