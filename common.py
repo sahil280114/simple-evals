@@ -10,14 +10,15 @@ from tqdm import tqdm
 from types_s import EvalResult, Message, SamplerBase, SingleEvalResult
 
 QUERY_TEMPLATE_MULTICHOICE = """
-Answer the following multiple choice question. The last line of your response should be of the following format: 'Answer: $LETTER' (without quotes) where LETTER is one of ABCD.
+{Question}.
 
-{Question}
+Options:
 
 A) {A}
 B) {B}
 C) {C}
 D) {D}
+The last line of your response should be of the following format: 'Answer: $option' 
 """.strip()
 
 ANSWER_PATTERN_MULTICHOICE = r"(?i)Answer\s*:\s*([A-D])"

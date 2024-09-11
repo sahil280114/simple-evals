@@ -66,7 +66,7 @@ def main():
                 raise Exception(f"Unrecoginized eval type: {eval_name}")
 
     evals = {
-        eval_name: get_evals(eval_name) for eval_name in ["humaneval","gpqa","math","mmlu"]
+        eval_name: get_evals(eval_name) for eval_name in ["humaneval","gpqa","mmlu","math","mmlu"]
     }
     debug_suffix = "_DEBUG" if debug else ""
     mergekey2resultpath = {}

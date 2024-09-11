@@ -38,7 +38,7 @@ class ChatCompletionSampler(SamplerBase):
         client: OpenAI,
         model: str = "reflection_70b",
         system_message: str | None = None,
-        temperature: float = 0.0,
+        temperature: float = 0.7,
         max_tokens: int = 6000,
     ):
         self.api_key_name = "test"
