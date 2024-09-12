@@ -18,7 +18,7 @@ For moderate to hard problems-
 1. Devise a step-by-step plan to solve the problem. (don't actually start solving yet, just make a plan)
 2. Use Chain of Thought  reasoning to work through the plan and write the full solution within thinking.
 
-You can use <reflection> </reflection> tags whenever
+You can use <reflection> </reflection> tags whenever you execute a complex step to verify if your reasoning is correct and if not correct it.
 
 
 </thinking>
