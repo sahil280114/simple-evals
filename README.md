@@ -1,3 +1,12 @@
+Running ifeval
+
+cd ifeval
+python3 gen_results.py
+python3 -m evaluation_main \
+  --input_data=./data/ifeval_input_data.jsonl \
+  --input_response_data=./data/reflection_output.jsonl \
+  --output_dir=./data/
+
 # Overview
 This repository contains a lightweight library for evaluating language models.
 We are open sourcing it so we can be transparent about the accuracy numbers we're publishing alongside our latest models (starting with `gpt-4-turbo-2024-04-09` and `gpt-4o-2024-05-13`).
