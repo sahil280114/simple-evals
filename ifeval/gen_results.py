@@ -40,8 +40,10 @@ In this section, provide the complete answer for the user based on your thinking
         stream=False,
         extra_body={"skip_special_tokens": False},
     )
-    return {"prompt":prompt, "response":response.choices[0].message.content.split("<output>")[1].replace("</output>", "").strip()}
-
+    try:
+        return {"prompt":prompt, "response":response.choices[0].message.content.split("<output>")[1].replace("</output>", "").strip()}
+    except:
+        return {"prompt":prompt, "response":response.choices[0].message.content}
 
 def load_data():
     with open("data/ifeval_input_data.jsonl") as f:
