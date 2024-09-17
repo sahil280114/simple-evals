@@ -10,7 +10,8 @@ client = OpenAI(
 
 
 
-def generate_one(prompt):
+def generate_one(row):
+    prompt = row["prompt"]
     system = '''You are a world-class AI system capable of complex reasoning and reflection. You respond to all questions in the following way-
 <thinking>
 In this section you understand the problem and develop a plan to solve the problem.
