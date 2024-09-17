@@ -38,7 +38,7 @@ class ChatCompletionSampler(SamplerBase):
         client: OpenAI,
         model: str = "reflection_70b",
         system_message: str | None = None,
-        temperature: float = 0.7,
+        temperature: float = 0.0,
         max_tokens: int = 6000,
     ):
         self.api_key_name = "test"
@@ -66,6 +66,7 @@ class ChatCompletionSampler(SamplerBase):
                     temperature=self.temperature,
                     max_tokens=self.max_tokens,
                     extra_body={"skip_special_tokens": False},
+                    stream=False
                 )
                 try:
                     return response.choices[0].message.content.split("<output>")[1].split("</output>")[0]

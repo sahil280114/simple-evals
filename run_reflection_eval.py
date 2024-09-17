@@ -10,6 +10,7 @@ try:
     from .humaneval_eval import HumanEval
     from .math_eval import MathEval
     from .mmlu_eval import MMLUEval
+    from .gsm_eval import GSMEval
     from .sampler.reflection_sampler import (
         REFLECTION_SYSTEM_MESSAGE,
         ChatCompletionSampler,
@@ -22,6 +23,7 @@ except:
     from humaneval_eval import HumanEval
     from math_eval import MathEval
     from mmlu_eval import MMLUEval
+    from gsm_eval import GSMEval
     from sampler.reflection_sampler import (
         REFLECTION_SYSTEM_MESSAGE,
         ChatCompletionSampler,
@@ -40,7 +42,7 @@ def main():
     samplers = {
         # chatgpt models:
         "reflection_70b": ChatCompletionSampler(
-            model="shareweights/v5_70_bf16",
+            model="sahil2801/test_reflect",
             system_message=REFLECTION_SYSTEM_MESSAGE,
             client=client
         ),
@@ -62,11 +64,13 @@ def main():
                 return GPQAEval()
             case "humaneval":
                 return HumanEval()
+            case "gsm8k":
+                return GSMEval(equality_checker=equality_checker)
             case _:
                 raise Exception(f"Unrecoginized eval type: {eval_name}")
 
     evals = {
-        eval_name: get_evals(eval_name) for eval_name in ["humaneval","gpqa","mmlu","math"]
+        eval_name: get_evals(eval_name) for eval_name in ["math"]
     }
     debug_suffix = "_DEBUG" if debug else ""
     mergekey2resultpath = {}

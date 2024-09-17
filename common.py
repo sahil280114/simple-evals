@@ -76,6 +76,12 @@ Yes
 Yes
 (give benefit of the doubt to units)
 
+    Expression 1: 80
+    Expression 2: 80%%
+
+Yes
+(skipping percentage symbol is fine)
+
 ---
 
 YOUR TASK
@@ -155,7 +161,7 @@ def aggregate_results(
     )
 
 
-def map_with_progress(f: callable, xs: list[Any], num_threads: int = 50):
+def map_with_progress(f: callable, xs: list[Any], num_threads: int = 70):
     """
     Apply f to each element of xs, using a ThreadPool, and show progress.
     """
