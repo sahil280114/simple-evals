@@ -1340,7 +1340,7 @@ class LetterFrequencyChecker(Instruction):
         or ord(letter.lower()) < 97
         or ord(letter.lower()) > 122
     ):
-      self._letter = random.choice(list(string.ascii_letters))
+      self._letter = letter.strip()
     else:
       self._letter = letter.strip()
     self._letter = self._letter.lower()
@@ -1384,7 +1384,6 @@ class LetterFrequencyChecker(Instruction):
     """Checks that the response contains the letter at the right frequency."""
     value = value.lower()
     letters = collections.Counter(value)
-
     if self._comparison_relation == _COMPARISON_RELATION[0]:
       return letters[self._letter] < self._frequency
     else:
@@ -1413,7 +1412,7 @@ class CapitalLettersEnglishChecker(Instruction):
     assert isinstance(value, str)
 
     try:
-      return value.isupper() and langdetect.detect(value) == "en"
+      return value.upper() and langdetect.detect(value) == "en"
     except langdetect.LangDetectException as e:
       # Count as instruction is followed.
       logging.error(
